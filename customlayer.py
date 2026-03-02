@@ -2,7 +2,7 @@
 Gwen Horzempa
 Project 2
 MATH 474
-Last Updated: 2/25/26
+Last Updated: 3/02/26
 
 In this file, I will be practicing making a custom model
 '''
