@@ -25,7 +25,6 @@ def comp_layer(tensor, batch_size=32):
     rounds = rows // batch_size
     L2 = []
     inf = []
-    num_diff = []
     start = 0
     stop = batch_size
     for batch in range(0, rounds):
@@ -44,13 +43,9 @@ def comp_layer(tensor, batch_size=32):
             diff = tf.subtract(keras_vals, custom_vals)
             l2norm = tf.norm(diff).numpy()
 
-            # getting euclidean distance
-            truediff = tf.reduce_sum(tf.abs(diff)).numpy()
-
             # putting values in a list
             L2.append(l2norm)
             inf.append(linf_K - linf_C)
-            num_diff.append(truediff)
             
         else:
 
@@ -67,16 +62,13 @@ def comp_layer(tensor, batch_size=32):
             diff = tf.subtract(keras_vals, custom_vals)
             l2norm = tf.norm(diff).numpy()
 
-            # getting euclidean distance
-            true_diff = tf.reduce_sum(tf.abs(diff)).numpy()
 
             # putting values in a list
             L2.append(l2norm)
             inf.append(linf_K - linf_C)
-            num_diff.append(true_diff)
 
             # incrimenting indixies
             start += batch_size
             stop += batch_size
             
-    return num_diff, L2, inf
+    return L2, inf

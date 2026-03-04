@@ -2,7 +2,7 @@
 Gwen Horzempa
 Project 2
 MATH 474
-Last Updated: 3/02/26
+Last Updated: 3/03/26
 
 In this file, I will be practicing making a custom model
 '''
@@ -38,10 +38,6 @@ class MyLayerNorm(tf.keras.layers.Layer):
 		'''
 		mean, var = tf.nn.moments(inputs, axes=-1, keepdims=True)
 		std = var**0.5
-		eq = (inputs - mean) / (std + 1e-4)
+		eq = (inputs - mean) / (std + 1e-3)
 		return (self.alpha * eq) + self.beta
 		
-	def get_config(self):
-		base_config = super().get_config()
-		return{**base_config, "alpha": self.alpha, 
-						"beta": self.beta}
