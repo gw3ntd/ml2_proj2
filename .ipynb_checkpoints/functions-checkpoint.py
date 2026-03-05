@@ -24,7 +24,8 @@ def comp_layer(tensor, batch_size=32):
     rows = tensor.shape[0]
     rounds = rows // batch_size
     L2 = []
-    inf = []
+    INF = []
+    MSE = []
     start = 0
     stop = batch_size
     for batch in range(0, rounds):
@@ -41,11 +42,16 @@ def comp_layer(tensor, batch_size=32):
 
             # getting l2 norm
             diff = tf.subtract(keras_vals, custom_vals)
-            l2norm = tf.norm(diff).numpy()
+            l2norm = tf.norm(diff, ord=2).numpy()
+            rel = l2norm / tf.norm(keras_vals, ord=2)
+
+            # getting mean squared error
+            mse = tf.reduce_mean(tf.square(custom_vals - keras_vals))
 
             # putting values in a list
-            L2.append(l2norm)
-            inf.append(linf_K - linf_C)
+            L2.append(rel)
+            INF.append(linf_K - linf_C)
+            MSE.append(mse)
             
         else:
 
@@ -60,15 +66,19 @@ def comp_layer(tensor, batch_size=32):
 
             # getting l2 norm
             diff = tf.subtract(keras_vals, custom_vals)
-            l2norm = tf.norm(diff).numpy()
+            l2norm = tf.norm(diff, ord=2).numpy()
+            rel = l2norm / tf.norm(keras_vals, ord=2)
 
+            # getting mean squared error
+            mse = tf.reduce_mean(tf.square(custom_vals - keras_vals))
 
             # putting values in a list
-            L2.append(l2norm)
-            inf.append(linf_K - linf_C)
+            L2.append(rel)
+            INF.append(linf_K - linf_C)
+            MSE.append(mse)
 
             # incrimenting indixies
             start += batch_size
             stop += batch_size
             
-    return L2, inf
+    return L2, INF, MSE
